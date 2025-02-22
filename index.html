@@ -8,10 +8,44 @@
 </head>
 
 <body>
-<form action="send.php" method="post">
-    <input type="text" name="product" placeholder="Введите товар" required>
+<form id="contactForm">
+    <label for="message">Оставьте заявку:</label>
+    <textarea id="message" name="message" required></textarea>
     <button type="submit">Отправить</button>
 </form>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById('message').value;
+    const token = '7400651101:AAGQPh81PuyQv4EeleYEpDGPtSDSiRn4TiI'; // Замените на свой токен
+    const chatId = '6462934307'; // Замените на свой chat_id
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+            alert('Сообщение отправлено!');
+        } else {
+            alert('Ошибка при отправке сообщения');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('Ошибка при отправке запроса');
+    });
+});
+</script>
 </body>
 
 </html>
